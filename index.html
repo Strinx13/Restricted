@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restricted Textarea</title>
+
+    <style>
+        * {
+            color-scheme: dark;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e1e;
+        }
+
+        h1 {
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+            text-align: center;
+            margin-top: 5dvh;
+            transition: all 0.3s ease;
+        }
+
+        label {
+            width: 100%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        textarea {
+            width: 50%;
+            height: 10dvh;
+            resize: none;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #1b1b1b;
+            border: 2px solid #0ff;
+            color: #0ff;
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+        }
+
+        #contador {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            transition: all 0.3s ease;
+        }
+
+        /* Cambios cuando se excede el límite de caracteres */
+        .overFlow {
+            border-color: #ff0000 !important;
+            color: #ff0000 !important;
+            background-color: #330000;
+            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+        }
+
+        .overFlow + #contador {
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+        }
+
+        /* Cambiar el estilo del h1 al sobrepasar el límite de caracteres */
+        .warning h1 {
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">Restricted Textarea</h1>
+    <label for="textarea">
+        <textarea placeholder="Start typing..." id="textarea" maxlength="15"></textarea>
+        <span id="contador">0/15</span>
+    </label>
+
+    <script>
+
+        const $textarea = document.getElementById('textarea');
+        const $contador = document.getElementById('contador');
+        const $title = document.getElementById('title'); // Referencia al h1
+
+        const maxlength = $textarea.getAttribute('maxlength');
+
+        // Mostrar el contador inicial
+        $contador.innerText = `${$textarea.value.length}/${maxlength}`;
+        
+        // Agregar evento de 'input' para actualizar el contador
+        $textarea.addEventListener('input', function(e) {
+            let value = e.target.value;
+            $contador.innerText = `${value.length}/${maxlength}`;
+
+            if (value.length >= maxlength) {
+                // Cambiar estilo del textarea y título al exceder el límite
+                $textarea.classList.add('overFlow');
+                document.body.classList.add('warning'); // Cambiar color del título
+            } else {
+                // Restaurar estilos si no se excede el límite
+                $textarea.classList.remove('overFlow');
+                document.body.classList.remove('warning'); // Restaurar el color del título
+            }
+        });
+
+    </script>
+</body>
+</html>
